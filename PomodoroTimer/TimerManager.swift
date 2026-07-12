@@ -12,7 +12,7 @@ struct TodoItem: Identifiable, Codable {
 final class TimerManager: ObservableObject {
     enum Phase: String {
         case work = "Focus"
-        case rest = "Break"
+        case rest = "Rest"
     }
 
     @Published var phase: Phase = .work
@@ -91,10 +91,10 @@ final class TimerManager: ObservableObject {
         pause()
         if phase == .work {
             completedSessions += 1
-            notify("Focus session done — take a break.")
+            notify("The bell sounds. Rest.")
             phase = .rest
         } else {
-            notify("Break over — back to work.")
+            notify("Rest is over. Return to focus.")
             phase = .work
         }
         secondsLeft = phaseSeconds
@@ -102,7 +102,7 @@ final class TimerManager: ObservableObject {
 
     private func notify(_ body: String) {
         let content = UNMutableNotificationContent()
-        content.title = "Pomodoro"
+        content.title = "Monk Mode"
         content.body = body
         content.sound = .default
         UNUserNotificationCenter.current().add(
