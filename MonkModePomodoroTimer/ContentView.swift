@@ -203,8 +203,6 @@ struct SettingsView: View {
             soundRow("Session ends", binding: $timer.workEndSound)
             soundRow("Rest ends", binding: $timer.breakEndSound)
 
-            switchRow("Sparks", isOn: $timer.showSparks)
-
             HStack {
                 Text("Appearance")
                     .font(.system(size: 11))
@@ -236,6 +234,9 @@ struct SettingsView: View {
                               binding: $timer.restColor)
                 }
             }
+
+            switchRow("Sparks", isOn: $timer.showSparks)
+
             switchRow("Launch at login", isOn: $timer.launchAtLogin)
 
             Rectangle().fill(theme.trace).frame(height: 1)
