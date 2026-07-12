@@ -11,26 +11,22 @@ Requires macOS 13+ and Apple's Command Line Tools (no Xcode needed):
 ```sh
 xcode-select --install   # only if you don't have the tools yet
 ./build.sh
-open build/PomodoroTimer.app
+open build/MonkModePomodoroTimer.app
 ```
 
-The timer appears in the menu bar as `25:00`. Click it for the controls and
-task list. Allow notifications when prompted so you get an alert when a
-session ends. Quit via the Quit button in the popover (there's no Dock icon).
+The timer appears in the menu bar as `25:00`. Click it for the popover;
+click the ring to start or pause. Allow notifications when prompted so you
+get an alert when a session ends. Right-click the menu bar timer to quit
+(there's no Dock icon).
 
 ## Start at login (optional)
 
 System Settings → General → Login Items → **+** → select
-`build/PomodoroTimer.app`. Tip: copy the app to `/Applications` first so it
+`build/MonkModePomodoroTimer.app`. Tip: copy the app to `/Applications` first so it
 survives a `./build.sh` rebuild wiping `build/`.
 
-## Changing work/break lengths
+## Settings
 
-There's no settings UI yet; the values are persisted in `UserDefaults`:
-
-```sh
-defaults write com.dominik.pomodorotimer workMinutes 50
-defaults write com.dominik.pomodorotimer breakMinutes 10
-```
-
-Restart the app after changing them.
+Click the gear in the popover: work/rest lengths, sessions per set,
+light/dark/auto appearance, and whether your working title shows next to the
+countdown in the menu bar. Everything persists in `UserDefaults`.
