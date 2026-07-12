@@ -74,6 +74,9 @@ final class TimerManager: ObservableObject {
     @Published var appearance: String { // "light" | "dark" | "auto"
         didSet { defaults.set(appearance, forKey: "appearance") }
     }
+    @Published var showSparks: Bool {
+        didSet { defaults.set(showSparks, forKey: "showSparks") }
+    }
     @Published var workEndSound: String {
         didSet { defaults.set(workEndSound, forKey: "workEndSound") }
     }
@@ -115,6 +118,8 @@ final class TimerManager: ObservableObject {
         workingTitle = defaults.string(forKey: "workingTitle") ?? ""
         showTitleInMenu = defaults.bool(forKey: "showTitleInMenu")
         appearance = defaults.string(forKey: "appearance") ?? "auto"
+        showSparks = defaults.object(forKey: "showSparks") != nil
+            ? defaults.bool(forKey: "showSparks") : true
         workEndSound = defaults.string(forKey: "workEndSound") ?? "Calm gong"
         breakEndSound = defaults.string(forKey: "breakEndSound") ?? "Calm gong"
         launchAtLogin = SMAppService.mainApp.status == .enabled

@@ -203,6 +203,8 @@ struct SettingsView: View {
             soundRow("Session ends", binding: $timer.workEndSound)
             soundRow("Rest ends", binding: $timer.breakEndSound)
 
+            switchRow("Sparks", isOn: $timer.showSparks)
+
             HStack {
                 Text("Appearance")
                     .font(.system(size: 11))
@@ -450,6 +452,13 @@ struct IncenseRing: View {
                     .opacity(timer.isRunning ? 1 : 0.4)
                     .offset(y: -80)
                     .rotationEffect(.degrees(progress * 360))
+                if timer.showSparks && timer.isRunning {
+                    let t = context.date.timeIntervalSinceReferenceDate
+                    let angle = progress * 2 * .pi
+                    ForEach(0..<6, id: \.self) { i in
+                        spark(i, t: t, emberX: 80 * sin(angle), emberY: -80 * cos(angle))
+                    }
+                }
                 VStack(spacing: 2) {
                     Text(timer.timeString)
                         .font(.system(size: 34, weight: .light))
@@ -464,5 +473,29 @@ struct IncenseRing: View {
         }
         // Greyed out while paused so the state is obvious at a glance.
         .opacity(timer.isRunning ? 1 : 0.45)
+    }
+
+    // Fuse sparks around the ember: each spark cycles fly-out-and-fade, fully
+    // determined by the current time — no stored particle state to update.
+    private func spark(_ i: Int, t: Double, emberX: Double, emberY: Double) -> some View {
+        let fi = Double(i)
+        let period = 0.5 + 0.4 * Self.rand(fi * 1.7)
+        let phase = t / period + fi / 6
+        let f = phase - floor(phase) // 0 = just emitted, 1 = burned out
+        let cycle = floor(phase)     // varies direction/reach each cycle
+        let direction = Self.rand(fi * 7.31 + cycle * 3.7) * 2 * .pi
+        let distance = 3 + f * (6 + 6 * Self.rand(fi * 2.9 + cycle))
+        let size = 0.6 + 2.2 * (1 - f)
+        let hot = Self.rand(fi + cycle * 1.3) > 0.5
+        return Circle()
+            .fill(hot ? Color(red: 1, green: 0.75, blue: 0.35) : Theme.ember)
+            .frame(width: size, height: size)
+            .offset(x: emberX + cos(direction) * distance,
+                    y: emberY + sin(direction) * distance)
+            .opacity((1 - f) * 0.9)
+    }
+
+    private static func rand(_ n: Double) -> Double {
+        abs(sin(n * 12.9898) * 43758.5453).truncatingRemainder(dividingBy: 1)
     }
 }
