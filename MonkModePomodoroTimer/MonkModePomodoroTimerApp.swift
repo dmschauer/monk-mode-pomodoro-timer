@@ -115,6 +115,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
                     : NSColor(red: 0.541, green: 0.514, blue: 0.459, alpha: 1)
             }
         case "Teal": return NSColor(red: 0.26, green: 0.62, blue: 0.63, alpha: 1)
+        case "Monk": return NSColor(red: 0.8196, green: 0.4471, blue: 0.3216, alpha: 1)
         case "Rose": return NSColor(red: 0.80, green: 0.52, blue: 0.58, alpha: 1)
         default: return NSColor(red: 0.33, green: 0.58, blue: 0.85, alpha: 1) // Sky
         }

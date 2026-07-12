@@ -87,9 +87,9 @@ final class TimerManager: ObservableObject {
     @Published var restEmoji: String {
         didSet { defaults.set(restEmoji, forKey: "restEmoji") }
     }
-
+    
     static let indicatorOptions = ["Color (Focus)", "Color (Rest)", "Dot (Focus)", "Dot (Rest)", "Emoji", "Icon"]
-    static let restColorOptions = ["Rose", "Sage", "Sky", "Stone", "Teal", "(System)"]
+    static let restColorOptions = ["Monk", "Rose", "Sage", "Sky", "Stone", "Teal", "(System)"]
     static let defaultWorkEmoji = "🕯️"
     static let defaultRestEmoji = "🪨"
     @Published var appearance: String { // "light" | "dark" | "auto"
