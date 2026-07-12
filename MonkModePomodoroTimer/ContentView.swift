@@ -222,6 +222,20 @@ struct SettingsView: View {
             }
 
             switchRow("Title in menu bar", isOn: $timer.showTitleInMenu)
+            switchRow("Phase in menu bar", isOn: $timer.showPhaseInMenu)
+            if timer.showPhaseInMenu {
+                pickerRow("Indicator", options: TimerManager.indicatorOptions,
+                          binding: $timer.phaseIndicator)
+                if timer.phaseIndicator == "Emoji" || timer.phaseIndicator == "Icon" {
+                    emojiRow("Focus emoji", binding: $timer.workEmoji,
+                             fallback: TimerManager.defaultWorkEmoji)
+                    emojiRow("Rest emoji", binding: $timer.restEmoji,
+                             fallback: TimerManager.defaultRestEmoji)
+                } else {
+                    pickerRow("Color", options: TimerManager.restColorOptions,
+                              binding: $timer.restColor)
+                }
+            }
             switchRow("Launch at login", isOn: $timer.launchAtLogin)
 
             Rectangle().fill(theme.trace).frame(height: 1)
@@ -255,6 +269,57 @@ struct SettingsView: View {
             .menuStyle(.borderlessButton)
             .menuIndicator(.hidden)
             .fixedSize()
+        }
+    }
+
+    private func pickerRow(_ label: String, options: [String],
+                           binding: Binding<String>) -> some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 11))
+                .foregroundStyle(theme.muted)
+            Spacer()
+            Menu {
+                ForEach(options, id: \.self) { name in
+                    Button(name) { binding.wrappedValue = name }
+                }
+            } label: {
+                HStack(spacing: 4) {
+                    Text(binding.wrappedValue)
+                        .font(.system(size: 11))
+                        .foregroundStyle(theme.fg)
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(theme.muted)
+                }
+            }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
+            .fixedSize()
+        }
+    }
+
+    // Empty field = use the default emoji (shown as dimmed placeholder).
+    private func emojiRow(_ label: String, binding: Binding<String>,
+                          fallback: String) -> some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 11))
+                .foregroundStyle(theme.muted)
+            Spacer()
+            ZStack(alignment: .trailing) {
+                if binding.wrappedValue.isEmpty {
+                    Text(fallback)
+                        .opacity(0.4)
+                        .allowsHitTesting(false)
+                }
+                TextField("", text: binding)
+                    .textFieldStyle(.plain)
+                    .multilineTextAlignment(.trailing)
+                    .tint(Theme.ember)
+                    .frame(width: 44)
+            }
+            .font(.system(size: 12))
         }
     }
 

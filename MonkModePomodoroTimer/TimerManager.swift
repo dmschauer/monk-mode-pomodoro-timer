@@ -71,6 +71,27 @@ final class TimerManager: ObservableObject {
     @Published var showTitleInMenu: Bool {
         didSet { defaults.set(showTitleInMenu, forKey: "showTitleInMenu") }
     }
+    @Published var showPhaseInMenu: Bool {
+        didSet { defaults.set(showPhaseInMenu, forKey: "showPhaseInMenu") }
+    }
+    @Published var phaseIndicator: String { // see indicatorOptions
+        didSet { defaults.set(phaseIndicator, forKey: "phaseIndicator") }
+    }
+    @Published var restColor: String { // see restColorOptions
+        didSet { defaults.set(restColor, forKey: "restColor") }
+    }
+
+    @Published var workEmoji: String { // empty = default
+        didSet { defaults.set(workEmoji, forKey: "workEmoji") }
+    }
+    @Published var restEmoji: String {
+        didSet { defaults.set(restEmoji, forKey: "restEmoji") }
+    }
+
+    static let indicatorOptions = ["Color (Focus)", "Color (Rest)", "Dot (Focus)", "Dot (Rest)", "Emoji", "Icon"]
+    static let restColorOptions = ["Rose", "Sage", "Sky", "Stone", "Teal", "(System)"]
+    static let defaultWorkEmoji = "🕯️"
+    static let defaultRestEmoji = "🪨"
     @Published var appearance: String { // "light" | "dark" | "auto"
         didSet { defaults.set(appearance, forKey: "appearance") }
     }
@@ -117,6 +138,20 @@ final class TimerManager: ObservableObject {
         completedSessions = defaults.integer(forKey: "completedSessions")
         workingTitle = defaults.string(forKey: "workingTitle") ?? ""
         showTitleInMenu = defaults.bool(forKey: "showTitleInMenu")
+        showPhaseInMenu = defaults.bool(forKey: "showPhaseInMenu")
+        // Migrate values stored under older option names.
+        switch defaults.string(forKey: "phaseIndicator") ?? "Color" {
+        case "Color": phaseIndicator = "Color (Rest)"
+        case "Dot": phaseIndicator = "Dot (Rest)"
+        case let other: phaseIndicator = other
+        }
+        switch defaults.string(forKey: "restColor") ?? "Sky" {
+        case "Lavender", "System": restColor = "(System)"
+        case "Grey": restColor = "Stone"
+        case let other: restColor = other
+        }
+        workEmoji = defaults.string(forKey: "workEmoji") ?? ""
+        restEmoji = defaults.string(forKey: "restEmoji") ?? ""
         appearance = defaults.string(forKey: "appearance") ?? "auto"
         showSparks = defaults.object(forKey: "showSparks") != nil
             ? defaults.bool(forKey: "showSparks") : true

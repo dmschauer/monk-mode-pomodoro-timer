@@ -19,6 +19,10 @@ click the ring to start or pause. Allow notifications when prompted so you
 get an alert when a session ends. Right-click the menu bar timer to quit
 (there's no Dock icon).
 
+# Install in Launchpad
+
+`cp -R build/MonkModePomodoroTimer.app /Applications/`
+
 ## Start at login (optional)
 
 System Settings → General → Login Items → **+** → select
